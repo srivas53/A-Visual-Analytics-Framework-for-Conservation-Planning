@@ -52,7 +52,6 @@ module.exports = function(appRoot) {
 		
 
 		});
-	
-});
+		
 	return router;
 };

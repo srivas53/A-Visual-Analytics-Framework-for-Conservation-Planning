@@ -18,7 +18,7 @@ let mongoDB = false;
 function getRandomCost(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
+//Patches of 30X30 m square size
 function getsquareGrid(cellside) {
     let MontanaBbox = [-112, 48, -111.5, 47.5];
     let polygonOfMontanaBbox = [[-112, 48], [-112, 47.5], [-111.5, 47.5], [-111.5, 48], [-112, 48]];

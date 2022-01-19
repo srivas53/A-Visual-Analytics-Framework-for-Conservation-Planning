@@ -2,7 +2,7 @@ const turf = require('@turf/turf');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const co = require('co');
-const url = 'mongodb://vaderserver0.cidse.dhcp.asu.edu:27017/eco_region';
+const url = 'mongodb://localhost:27017/eco_region'; //mongodb://localhost:27017/eco_region, mongodb://vaderserver0.cidse.dhcp.asu.edu:27017/eco_region
 const shapefile = require('shapefile');
 
 let gridCollection = "grid_Idaho";

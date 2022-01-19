@@ -31,10 +31,10 @@ const storeUserGrid= require('./routes/storeUserGrid')(path.resolve(__dirname));
 const storeUserParcel = require('./routes/storeUserParcel')(path.resolve(__dirname));
 const pAwithdiffCate = require('./routes/pAwithdiffCate')(path.resolve(__dirname));
 const saveOptiRuserR= require('./routes/saveOptiRuserR')(path.resolve(__dirname));
+
 ///////////////////The path.resolve must be added, otherwise the router can not find the request
 
 const app = express();
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,6 +47,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 // app.use('/js', express.static(path.join(__dirname, 'public/javascripts/browser')))
 
 
@@ -76,6 +77,7 @@ app.use('/storeUserGrid', storeUserGrid);
 app.use('/storeUserParcel', storeUserParcel);
 app.use('/pAwithdiffCate', pAwithdiffCate);
 app.use('/saveOptiRuserR', saveOptiRuserR);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

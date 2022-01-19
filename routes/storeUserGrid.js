@@ -13,7 +13,7 @@ const MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
 
 // Connection URL
-const url = 'mongodb://vaderserver0.cidse.dhcp.asu.edu:27017/eco_region';
+const url = 'mongodb://localhost:27017/eco_region'; //mongodb://localhost:27017/eco_region, mongodb://vaderserver0.cidse.dhcp.asu.edu:27017/eco_region
 let mongoDB = false;
 
 function getRandomCost(min, max) {

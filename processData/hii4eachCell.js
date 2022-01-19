@@ -4,7 +4,7 @@ const assert = require('assert');
 const cluster = require('cluster');
 const os = require('os');
 const co = require('co');
-const url = 'mongodb://vaderserver0.cidse.dhcp.asu.edu:27017/eco_region';
+const url = 'mongodb://localhost:27017/eco_region'; //mongodb://localhost:27017/eco_region,mongodb://vaderserver0.cidse.dhcp.asu.edu:27017/eco_region
 const shapefile = require('shapefile');
 
 const INSERT_BATCH_SIZE = 20000;

@@ -36,13 +36,13 @@ For the US map, there are 12 land attributes involved for users to get the best 
 * git clone the repository to your local computer, and download and unzip the extra foulders 'node modules' and 'images' in the [link](https://drive.google.com/drive/folders/1RLI7bu3ESEwGlcD8Epc_ogtuBZRMpnhf?usp=sharing). The two extra folders are too big to upload. Therefore, I compress them and put them in the google drive for the download.
 * Process the downloaded data and import them to the MongoDB based on the information in the 'schema' folder.
 Change the URL of the database to your local URL in the 'router' folder.
-* Run 'npm install', then 'npm start' to start the project
+* Run 'npm install', then 'npm start' to start the project. Local URL is localhost:13000
 * Open the website in at least 1280 x 1024 screen. The code does not consider the scalability. The issue will be solved in future work. 
 
 The data size for the project is huge. The process phase is complicated and needs parallel computing, which still takes a long time to finish the data processing. The shapefiles of the row data usually contain a lot of issues, such as the bad designed spatial data. For these issues, the developer needs to deal with them one by one. I suggest users to use my available website to play the system, rather than build their own website. 
 
 ## Avaiable website to play the system
-The [Conservation Planning System](http://104.196.253.120:13000/) is available now for users to play for generating their own purchasing portfolio with a variety of constraints. Please use a large screen to open the website.
+The [Conservation Planning System](http://104.196.253.120:13000/) is available now for users to play for generating their own purchasing portfolio with a variety of constraints. Please use a large screen to open the website. 
 
 ## Demo of case study
 <a href="https://youtu.be/NU5QoRY3ZhE" target="_blank">Demo Video</a> provides two cases to introduce the usage of the system. 

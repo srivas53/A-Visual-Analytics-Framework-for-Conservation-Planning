@@ -27,7 +27,9 @@ let color72reverse = [
     "#005a32"
 ];
 let color7 = color72reverse.reverse();
-let preprocessedData; 
+let preprocessedData;
+
+
 //Step 1: Data Filtering
 function filterData(originalDataArr, filterInfo) { //Get original data attributes, and filtered information as set by the user. see where these two are being fetched from
     let filteredData = originalDataArr.filter((obj) => { 
@@ -116,152 +118,6 @@ function filterDatabyRanking(filteredDatabyAttr, ranking2filter) {
 }
 
 ///////////////////////////////////////////////
- 
-
-//For development,  just manually copy a sample json response, and access it via Python using GET method
-router.get('/parsedInfo',(req,res,next) =>{
-    const parsedInfo={
-        originalData: {
-          PA: [ 726.1503372836057, 14086.408703917143 ],
-          MA: [ 21000, 21000 ],
-          HII: [ 8, 12 ],
-          HW: [ 1089.5797792576188, 21000 ],
-          HY: [ 6585.908545440518, 18686.13492865602 ],
-          Tree: [ 7, 8 ],
-          Bird: [ 157, 160 ],
-          MM: [ 48, 50 ],
-          Fish: [ 34, 40 ],
-          RP: [ 11, 12 ],
-          AM: [ 6, 6 ],
-          Cost: [ 0.0058395202899662576, 0.08299264525623651 ]
-        },
-        boxplotInfo: {
-          PA: {
-            min: 726.1503372836057,
-            max: 14086.408703917143,
-            median: 8268.593695984357,
-            quarter: 6036.136741037557,
-            threeQuarters: 10989.008136409113,
-            average: 8462.812989190521
-          },
-          MA: {
-            min: 21000,
-            max: 21000,
-            median: 21000,
-            quarter: 21000,
-            threeQuarters: 21000,
-            average: 21000
-          },
-          HII: {
-            min: 8,
-            max: 12,
-            median: 8,
-            quarter: 8,
-            threeQuarters: 10,
-            average: 9.16
-          },
-          HW: {
-            min: 1089.5797792576188,
-            max: 21000,
-            median: 14070.113926339101,
-            quarter: 9355.707449004089,
-            threeQuarters: 17834.47026165931,
-            average: 13694.865402712423
-          },
-          HY: {
-            min: 6585.908545440518,
-            max: 18686.13492865602,
-            median: 13160.572519169453,
-            quarter: 10641.713350717831,
-            threeQuarters: 15560.140839145804,
-            average: 13079.917225896519
-          },
-          Tree: {
-            min: 7,
-            max: 8,
-            median: 8,
-            quarter: 7,
-            threeQuarters: 8,
-            average: 7.645
-          },
-          Bird: {
-            min: 157,
-            max: 160,
-            median: 158.5,
-            quarter: 158,
-            threeQuarters: 160,
-            average: 158.69625
-          },
-          MM: {
-            min: 48,
-            max: 50,
-            median: 49,
-            quarter: 48,
-            threeQuarters: 49,
-            average: 48.7225
-          },
-          Fish: {
-            min: 34,
-            max: 40,
-            median: 34,
-            quarter: 34,
-            threeQuarters: 34,
-            average: 34.75
-          },
-          RP: {
-            min: 11,
-            max: 12,
-            median: 11,
-            quarter: 11,
-            threeQuarters: 11,
-            average: 11.105
-          },
-          AM: {
-            min: 6,
-            max: 6,
-            median: 6,
-            quarter: 6,
-            threeQuarters: 6,
-            average: 6
-          },
-          Cost: {
-            min: 0.0058395202899662576,
-            max: 0.08299264525623651,
-            median: 0.008062740499997821,
-            quarter: 0.007575434987354412,
-            threeQuarters: 0.008387863441510594,
-            average: 0.00868378266323114
-          }
-        },
-        userDefinedGridInfo: {
-          bbox: [
-            -108.4364661992091,
-            47.53111102290634,
-            -108.69325359440927,
-            47.45130843796394
-          ],
-          cellside: null,
-          searchArea: 197940914.02697188
-        },
-        filterInfo: {
-          averageHII: { filterRange: [Object], sortDirection: 'asce' },
-          averagetree: { filterRange: [Object], sortDirection: 'desc' },
-          averagemammal: { filterRange: [Object], sortDirection: 'desc' }
-        },
-        ranking2filter: [ 1, 3 ],
-        constraints: { id: 'cost', range: [ 0, 908617 ] },
-        objFun: { goal: 'area', goalDirection: 'Maximize' },
-        costArea: { totalCost: 1707737, totalArea: 197940914.02697188 },
-        paType: 'paLayer2'
-      };
-    res.status(200).json({
-        message: parsedInfo
-    });
-});
-
-module.exports=router;
-
-
 
 //Checking the url structure of the API call on optimization
 module.exports = function (appRoot) {
@@ -269,10 +125,13 @@ module.exports = function (appRoot) {
         let request = req._parsedUrl.query;
         let parsedInfo = JSON.parse(request.replace(/%22/g, '"'));  //In api request entire URL is being passed, and here, the url is being fetched, and then parsed as a json
         //console.log(parsedInfo);
-        res.status(200).json({
-            query: request,
-            message: parsedInfo
-            });
+        let writeStream = fs.createWriteStream('inputJSONforParsedInfo.txt');
+        writeStream.write(JSON.stringify(parsedInfo));
+        writeStream.on('finish',function(){
+          console.log('file written');
+
+        });
+        writeStream.end();
            
     });
     
@@ -280,10 +139,23 @@ module.exports = function (appRoot) {
     return router;
 };
 
+
+//When I define a sub route this way, the app crashes, and must have to do with module.exports(appRoot), as defined above
+// router.get('/parsedInfo',(req,res,next) =>{
+//     const parsedInfoFinal=parsedInfo;
+//     res.status(200).json({
+//       message: parsedInfoFinal
+//   });
+// });
+
+// module.exports=router;
+
+
 //Qusetions for RUI:
 //1. Show the situation above, and ask how can I send the parsedInfo as a JSON to a new endpoint? Do I have tp create a npw file in the routes folder? What dies return router do? Why module.export(appRoot), and why are we not using module.exports=router instead?
 //2. How is the result from optimization function used next? This is critical to structure the system when I want to send data back from Python
 //3. What is the GLPK routine running on rankPatches.js code?
+//4. like users and index, there is a separate routing practice to follow for simple endpoints. The oines like this code needs a query as a parameter
 
 
 

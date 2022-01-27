@@ -31,7 +31,7 @@ const storeUserGrid= require('./routes/storeUserGrid')(path.resolve(__dirname));
 const storeUserParcel = require('./routes/storeUserParcel')(path.resolve(__dirname));
 const pAwithdiffCate = require('./routes/pAwithdiffCate')(path.resolve(__dirname));
 const saveOptiRuserR= require('./routes/saveOptiRuserR')(path.resolve(__dirname));
-const parsedInfo= require('./routes/parsedInfo');
+const optimizationFinal= require('./routes/optimizationFinal');
 ///////////////////The path.resolve must be added, otherwise the router can not find the request
 
 const app = express();
@@ -77,7 +77,7 @@ app.use('/storeUserGrid', storeUserGrid);
 app.use('/storeUserParcel', storeUserParcel);
 app.use('/pAwithdiffCate', pAwithdiffCate);
 app.use('/saveOptiRuserR', saveOptiRuserR);
-app.use('/parsedInfo', parsedInfo);
+app.use('/optimizationFinal', optimizationFinal);
 
 
 // catch 404 and forward to error handler

@@ -92,8 +92,9 @@ optimiazationButton.on('click', function (d) {
         url: './optimization',
         success: function (data) {
             // console.log('to optimize');
-            // console.log("bestPatches: ", data);
+            console.log("BESTPATCHES: ", data);
             userPatchesArr = data;
+            //console.log('POSSIBLE PATCHES', userPatchesArr);
 
             if (globalTest["userSelectedPatches"]) map.removeLayer(globalTest["userSelectedPatches"]);
             if (globalTest["allPatchesLayer"]) map.removeLayer(globalTest["allPatchesLayer"]);

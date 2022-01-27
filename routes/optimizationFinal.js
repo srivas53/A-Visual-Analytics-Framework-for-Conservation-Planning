@@ -5,8 +5,8 @@ var finalInfo;
 //../app'
 /* GET users listing. */
 
-
-reader=fs.createReadStream('inputJSONforParsedInfo.txt');
+//Read the .txt file written by the optimization.js code
+reader=fs.createReadStream('optimizationInput.txt');  //optimizationInput
 
 reader.on('data', function (chunk) {
     //console.log(JSON.parse(chunk));
@@ -18,10 +18,10 @@ reader.on('data', function (chunk) {
 router.get('/', function(req, res, next) {
     //console.log(finalInfo, 'I wanna send this please'); 
     res.status(200).json({
-        message: finalInfo
+        optimizationParameters: finalInfo
     });
 });
 
 module.exports = router;
 
-//If server does not restart on webpage refresh, the updated txt file cannot be fetched (as of this moment)
+//If server does not restart on webpage refresh, the updated txt file cannot be fetched by the /parsedInfo GET API call (as of this moment)

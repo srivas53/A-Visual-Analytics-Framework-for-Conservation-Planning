@@ -8,7 +8,10 @@ Created on Wed Jan 19 12:55:31 2022
 import requests
 import json
 
-
+##Step 1: Make sure that the math is matching
+##Step 2: Let the optimization.js code export the current .txt file (Can remove the part of setting Bounds and area below it)
+##Step 3: Fetch first 5 lines of the current .txt file in parsedInfo.js, and send it in the GET framework
+##Step 4: Python code, get relevant ino
 #Fetch Sample JSON data from a sample API endpoint /optimization/parsedInfo
 
 sampleRequest=requests.get('http://localhost:13000/parsedInfo')
@@ -24,6 +27,10 @@ def optimizationRoutine():
     
     #Defining a function that generates a .txt file, comatible with glpk
     def createInputFile():
+        minormax4objfun=objFun['goalDirection']
+        goal= objFun['goal']
+        
+        
         
         
     

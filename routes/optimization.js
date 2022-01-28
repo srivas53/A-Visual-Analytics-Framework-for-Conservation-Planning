@@ -246,7 +246,7 @@ module.exports = function (appRoot) {
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                ///objective function
+                //objective function
                 // let writeStream = fs.createWriteStream('optimizationInput.txt');
                 // let minormax4objfun = objFun.goalDirection;
                 // let goal = objFun.goal;
@@ -324,7 +324,7 @@ module.exports = function (appRoot) {
                 //     //console.log(patch2buy, "PATCH TO BUY");
                 //     res.send(patch2buy);
                 // });
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 writeStream.end();
             }

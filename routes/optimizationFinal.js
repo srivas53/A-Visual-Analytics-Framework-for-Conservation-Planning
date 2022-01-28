@@ -6,7 +6,7 @@ var finalInfo;
 /* GET users listing. */
 
 //Read the .txt file written by the optimization.js code
-reader=fs.createReadStream('optimizationInput.txt');  //optimizationInput
+reader=fs.createReadStream('optimizationInput.txt');  //optimizationInput, inputJSONforParsedInfo
 
 reader.on('data', function (chunk) {
     //console.log(JSON.parse(chunk));

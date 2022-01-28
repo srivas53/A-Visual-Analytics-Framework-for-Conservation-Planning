@@ -13,7 +13,7 @@ import numpy as np
 ##Step 1: Make sure that the math is matching= DONE
 ##Step 2: Let the optimization.js code export the current .txt file (Can remove the part of setting Bounds and area below it)= DONE
 ##Step 3: Fetch first 5 lines of the current optimization.txt file into the parsedInfo.js, and send it in the GET framework =DONE
-##Step 4: Python code, get relevant info
+##Step 4: Python code, get relevant info = DONE
 #Fetch Sample JSON data from a sample API endpoint /optimizationFinal
 
 fetchResponse=requests.get('http://localhost:13000/optimizationFinal')
@@ -24,7 +24,7 @@ optimizationParameters=fetchResponse.json()
 #User clicks on optimize button
 #optimization.js executes, exports the .txt file containing the the optimization paramenters
 #optimizationParameters.js code runs, exporting the required information to /optimizationFinal API endpoint
-#Python gets the requored info using GET , and exports the output
+#Python gets the required info using GET , and exports the output
 #form4opti.js gets the requred output from the API endpoint /optimizationFinal API endpoint
 
 ##Doubt: Ask where the optimization output is being directed to. As per my knowledge, it is under line 93 of form$opti.js (Tho, not being able to get anything logged on the console)
@@ -72,46 +72,35 @@ constraintWeightsFinal=np.array(onlyEvenIndex(constraintWeights)).astype(int)
 #Initiate model object
 
 if optimizationObjective=='Maximize':
-    optimizationModel = LpProblem(name="optimizationModel", sense=0) #sense=0 is maximization
+    optimizationModel = LpProblem(name="optimizationModel", sense=LpMaximize) #sense=0 is maximization
 else:
-    optimizationModel = LpProblem(name="optimizationModel", sense=1)
+    optimizationModel = LpProblem(name="optimizationModel", sense=LpMinimize)
     
 
 #Define model variables
-# x = {i: LpVariable(name=f"x{i}", lowBound=0) for i in range(1, 5)}
+x = {i: LpVariable(name=f"x{i}", cat='Binary') for i in range(len(listOfVariables))}
 
-# # Add constraints
-# model += (lpSum(x.values()) <= 50, "manpower")
-# model += (3 * x[1] + 2 * x[2] + x[3] <= 100, "material_a")
-# model += (x[2] + 2 * x[3] + 3 * x[4] <= 90, "material_b")
+#optimizationModel+=(x[0] * constraintWeightsFinal[0]<=0, "Constraint1")    
+#Define the model constraint
 
-# Set the objective
-#model += 20 * x[1] + 12 * x[2] + 40 * x[3] + 25 * x[4]
-#modelVariables=LpVariable.dicts("modelVariables",listOfVariables,cat='Binary')
+constraintDefinition=''
 
-
-
-
-        
+for i in range(len(x)):
+    constraintDefinition += (x[i] * constraintWeightsFinal[i])
     
+#Add model constraint to the optimizationModel
 
-#Define model contraints
+optimizationModel+=(constraintDefinition<=constraintLimit , "Constraint_1")
 
+#Define the objective function
+objectiveFunctionDefinition=''
 
-#Constraint 1:
-#13092 x0 + 10901 x1 + 8865 x2 + 10795 x3 + 2974 x4 + 2649 x5 + 10338 x6 + 1750 x7 + 1093 x8 + 9700 x9 + 7682 x10 + 7743 x11 + 10921 x12 + 10635 x13 + 11016 x14 + 10487 x15 >= 0
-#Constraint 2: 
-#model += (1225 *x0 + 2488 *x1 + 17125 *x2 + 9566 *x3 + 4053 *x4 + 16095 *x5 + 18239 *x6 + 10915 *x7 + 5599 *x8 + 1213 *x9 + 2751 *x10 + 7924 *x11 + 19825 *x12 >= 0, "constraint_1")
-optimizationModel += (1225 *x0 + 2488 *x1 + 17125 *x2 + 9566 *x3 + 4053 *x4 + 16095 *x5 + 18239 *x6 + 10915 *x7 + 5599 *x8 + 1213 *x9 + 2751 *x10 + 7924 *x11 + 19825 *x12 <= 66334, "constraint_2")
+for i in range(len(x)):
+    objectiveFunctionDefinition += (x[i] * objectiveFunctionWeightsFinal[i])
 
+#Add objective function to the optimizationModel
 
-#Define Objective Function
-
-#1614750.81375 x0 + 1293400.40865 x1 + 1131580.7633 x2 + 1293429.5946 x3 + 323145.524851 x4 + 323227.995448 x5 + 1297043.6144 x6 + 161625.27155 x7 + 161605.73905 x8 + 1293107.57875 x9 + 969727.603351 x10 + 1134096.50345 x11 + 1293088.20845 x12 + 1293205.8954 x13 + 1293138.80135 x14 + 1456323.7692 x15
-obj_func=161675.298502*x0 + 323088.475448* x1 + 2261922.02631* x2 + 1292725.42645 *x3 + 484817.294249* x4 + 2263281.06565* x5 + 2263406.42245 *x6 + 1454420.12535 *x7 + 807909.332349 *x8 + 161618.9258 *x9 + 323334.699752 *x10 + 808269.308401 *x11 + 2424101.467 *x12
-optimizationModel +=obj_func
-#Can also be written using lpsum # Add the objective function to the model
-#model += lpSum([x, 2 * y]) is equivalent to model += x + 2 * y
+optimizationModel+=objectiveFunctionDefinition
 
 
 status = optimizationModel.solve()
@@ -123,15 +112,19 @@ status = optimizationModel.solve()
 
 
 
-#Print final o/p for which patches should be bought
+print(f"status: {optimizationModel.status}, {LpStatus[optimizationModel.status]}")
 
-for var in model.variables():
+
+print(f"objective: {optimizationModel.objective.value()}")
+
+
+for var in optimizationModel.variables():
     print(f"{var.name}: {var.value()}")
-    
-#Print value of the final area (optimal solution value of the objective function, which is area in this case)
 
 
-print(f"objective: {model.objective.value()}")
+
+for name, constraint in optimizationModel.constraints.items():
+    print(f"{name}: {constraint.value()}")
 
 
 

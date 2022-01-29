@@ -117,44 +117,6 @@ function filterDatabyRanking(filteredDatabyAttr, ranking2filter) {
     return selectedData;
 }
 
-///////////////////////////////////////////////
-
-// //Fetch the required input data for optimization, and write it in a .txt file
-// module.exports = function (appRoot) {
-//     router.get('/', function (req, res, next) {
-//         let request = req._parsedUrl.query;
-//         let parsedInfo = JSON.parse(request.replace(/%22/g, '"'));  //In api request entire URL is being passed, and here, the url is being fetched, and then parsed as a json
-//         //console.log(parsedInfo);
-//         let writeStream = fs.createWriteStream('inputJSONforParsedInfo.txt');
-//         writeStream.write(JSON.stringify(parsedInfo));
-//         writeStream.on('finish',function(){
-//           console.log('file written');
-
-//         });
-//         writeStream.end();
-           
-//     });
-    
-
-//     return router;
-// };
-
-
-
-
-//Qusetions for RUI:
-//1. Show the situation above, and ask how can I send the parsedInfo as a JSON to a new endpoint? Do I have tp create a npw file in the routes folder? What dies return router do? Why module.export(appRoot), and why are we not using module.exports=router instead?
-//2. How is the result from optimization function used next? This is critical to structure the system when I want to send data back from Python
-//3. What is the GLPK routine running on rankPatches.js code?
-//4. like users and index, there is a separate routing practice to follow for simple endpoints. The oines like this code needs a query as a parameter
-
-
-
-
-//try defining router.post to /parsedInfo, and add fetch method in the function below??
-
-
-/////////////////////////////////////////////////////////////////////////
 //MIP optimization using GLPK
 module.exports = function (appRoot) {
     /* GET map data. */
@@ -164,18 +126,6 @@ module.exports = function (appRoot) {
         //Therefore, the process of writing into JSON should happen sometime before optimization.js is being executed (QUESTION FOR RUI)
         let request = req._parsedUrl.query;
         let parsedInfo = JSON.parse(request.replace(/%22/g, '"')); 
-        //The chunk below was written to get just the parsed info from the url query into a ,.txt file, but is no longer needed
-
-        // let writeStream = fs.createWriteStream('inputJSONforParsedInfo.txt');
-        // writeStream.write(JSON.stringify(parsedInfo));
-        // writeStream.on('finish',function(){
-        //   console.log('parsedInfo file written');
-
-        // });
-        // writeStream.end();
-        //console.log(parsedInfo,'PYTHON INPUT');
-
-
         let userDefinedGridInfo = parsedInfo.userDefinedGridInfo;
         let filterInfo = parsedInfo.filterInfo;
         let ranking2filter = parsedInfo.ranking2filter;
@@ -246,7 +196,7 @@ module.exports = function (appRoot) {
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                //objective function
+                // // objective function
                 // let writeStream = fs.createWriteStream('optimizationInput.txt');
                 // let minormax4objfun = objFun.goalDirection;
                 // let goal = objFun.goal;
@@ -315,16 +265,16 @@ module.exports = function (appRoot) {
                 //     let patch2buy = [];
                 //     //console.log("Sample iteration" +  prob.getObjVal()); //Just getting an idea about the response structure
                 //     for (let i = 1; i < variablesNum + 1; i++) {
-                //         //console.log("varibles" + (i - 1) + ": " + prob.getColPrim(i)); //These are the indication of which patches to buy
+                //         console.log("varibles" + (i - 1) + ": " + prob.getColPrim(i)); //These are the indication of which patches to buy
                 //         if (prob.getColPrim(i) == 1) {
                 //             patch2buy.push(preprocessedData[i - 1])
                 //         }
                 //     }
                 //     prob.delete();
-                //     //console.log(patch2buy, "PATCH TO BUY");
+                //     //console.log(patch2buy, "PATCH TO BUY");  (THIS HAS ALL THE RELEVANT FEATURE DATA FOR EACH PATCH)
                 //     res.send(patch2buy);
                 // });
-                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 writeStream.end();
             }

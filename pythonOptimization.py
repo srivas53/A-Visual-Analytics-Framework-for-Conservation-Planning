@@ -10,22 +10,22 @@ import json
 import requests
 import re
 import numpy as np
-##Step 1: Make sure that the math is matching= DONE
-##Step 2: Let the optimization.js code export the current .txt file (Can remove the part of setting Bounds and area below it)= DONE
-##Step 3: Fetch first 5 lines of the current optimization.txt file into the parsedInfo.js, and send it in the GET framework =DONE
-##Step 4: Python code, get relevant info = DONE
-#Fetch Sample JSON data from a sample API endpoint /optimizationFinal
+from flask import Flask
+app = Flask(__name__) 
 
-fetchResponse=requests.get('http://localhost:13000/optimizationFinal')
+
+
+    
+fetchResponse=requests.get('http://localhost:13000/optimizationParameters')#'http://localhost:13000/optimizationParameters'
 optimizationParameters=fetchResponse.json()
 
 ##Desired Structure:
 #User selects all the requred parameters
 #User clicks on optimize button
 #optimization.js executes, exports the .txt file containing the the optimization paramenters
-#optimizationParameters.js code runs, exporting the required information to /optimizationFinal API endpoint
+#optimizationParameters.js code runs, exporting the required information to /optimizationParameters API endpoint
 #Python gets the required info using GET , and exports the output
-#form4opti.js gets the requred output from the API endpoint /optimizationFinal API endpoint
+#form4opti.js gets the requred output from the API endpoint /optimizationParameters API endpoint
 
 ##Doubt: Ask where the optimization output is being directed to. As per my knowledge, it is under line 93 of form$opti.js (Tho, not being able to get anything logged on the console)
 
@@ -112,22 +112,20 @@ status = optimizationModel.solve()
 
 
 
-print(f"status: {optimizationModel.status}, {LpStatus[optimizationModel.status]}")
-
-
-print(f"objective: {optimizationModel.objective.value()}")
-
+#patchesToBuy={}
 
 for var in optimizationModel.variables():
     print(f"{var.name}: {var.value()}")
+    #patchesToBuy[f"{var.name}"]=f"{var.value()}"
 
 
 
 for name, constraint in optimizationModel.constraints.items():
     print(f"{name}: {constraint.value()}")
-
-
-
+    
+print(f"objective: {optimizationModel.objective.value()}")    
+    #Spawn:
+    #1. spawn chunk is written in index.js file
 
 
 

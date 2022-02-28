@@ -6,7 +6,7 @@ const _ = require('underscore');
 const path = require('path');
 const turf = require('@turf/turf');
 const glp = require("glpk");
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 
 const MongoClient = require('mongodb').MongoClient,
@@ -138,7 +138,7 @@ module.exports = function (appRoot) {
 
         co(function* () {
             function generateGLPK(preprocessedData, constraints, objFun) {
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////Code for Python///////////////////////////////////////////////////////////////////
 
                 let writeStream = fs.createWriteStream('optimizationInput.txt');
                 //generate objective function
@@ -188,15 +188,25 @@ module.exports = function (appRoot) {
                     constraintSecond: constraint2
 
                 };
+
+                fetch('http://127.0.0.1:5000/optimalSolution', {
+                    method: 'POST',
+                    body: JSON.stringify(optInput),
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => res.json())
+                  .then(json => console.log(json))
+                  .catch(err => console.log(err));
+
                 
                 writeStream.write(JSON.stringify(optInput));
                 writeStream.on('finish', function () {
                     console.log('optimizationInput file has been written');
+                   
                 });
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                // // objective function
+                ////objective function
                 // let writeStream = fs.createWriteStream('optimizationInput.txt');
                 // let minormax4objfun = objFun.goalDirection;
                 // let goal = objFun.goal;
@@ -249,33 +259,34 @@ module.exports = function (appRoot) {
                 //     console.log('optimizationInput file has been written');
                 //     let prob = new glp.Problem();
                 //     prob.readLpSync("optimizationInput.txt");
-                //     prob.scaleSync(glp.SF_AUTO);
-                //     prob.simplexSync({ presolve: glp.ON });
-                //     let variablesNum = prob.getNumInt();
-                //     // console.log("variablesNum ", variablesNum);
+                //     prob.scaleSync(glp.SF_AUTO); //Choose scaling options automatically
+                //     prob.simplexSync({ presolve: glp.ON }); //Using built in presolver for simplex
+                //     let variablesNum = prob.getNumInt(); //returns the number of columns (structural variables), which are marked as integer. Note that this number does include binary columns.
+                //     console.log("variablesNum ", variablesNum);
                 //     if (prob.getNumInt() > 0) {
                 //         function callback(tree) {
-                //             if (tree.reason() == glp.IBINGO) {
+                //             if (tree.reason() == glp.IBINGO) { //The callback routine is called with the reason code GLP_IBINGO if LP relaxation of the current subproblem being solved to optimality is integer feasible (i.e. values of all structural variables of integer kind are integral within the working precision) and its objective value is better than the best known integer feasible solution.
                 //                 // ...
                 //             }
                 //         }
-                //         prob.intoptSync({ cbFunc: callback });
+                //         prob.intoptSync({ cbFunc: callback }); //use MIP solver, using branch-and-cut method, here, presolver is off, and hence, according to the documentation, on entry to the routine glp_intopt the problem object, which the parameter mip points to, should contain optimal solution to LP relaxation
                 //     }
-                //     // console.log("objective: " + prob.mipObjVal());
+                //     console.log("objective: " + prob.mipObjVal());
                 //     let patch2buy = [];
-                //     //console.log("Sample iteration" +  prob.getObjVal()); //Just getting an idea about the response structure
+                //     console.log("final obj val " +  prob.getObjVal()); //Just getting an idea about the response structure
+                //     //console.log("variable" + '0' + ": " + prob.getColPrim(1))
                 //     for (let i = 1; i < variablesNum + 1; i++) {
-                //         console.log("varibles" + (i - 1) + ": " + prob.getColPrim(i)); //These are the indication of which patches to buy
+                //         //console.log("variables" + (i-1) + ": " + prob.getColPrim(i)); //returns primal value of the structural variable associated with j-th column.
                 //         if (prob.getColPrim(i) == 1) {
                 //             patch2buy.push(preprocessedData[i - 1])
                 //         }
                 //     }
                 //     prob.delete();
-                //     //console.log(patch2buy, "PATCH TO BUY");  (THIS HAS ALL THE RELEVANT FEATURE DATA FOR EACH PATCH)
+                //     //console.log(patch2buy, "PATCH TO BUY");  //(THIS HAS ALL THE RELEVANT FEATURE DATA FOR EACH PATCH)
                 //     res.send(patch2buy);
                 // });
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                
+
                 writeStream.end();
             }
             let db = yield MongoClient.connect(url);

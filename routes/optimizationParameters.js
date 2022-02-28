@@ -22,6 +22,8 @@ router.get('/', function(req, res, next) {
     });
 });
 
+
+
 module.exports = router;
 
 //If server does not restart on webpage refresh, the updated txt file cannot be fetched by the /parsedInfo GET API call (as of this moment)

@@ -363,7 +363,8 @@ module.exports = function (appRoot) {
                     }
                     prob.intoptSync({ cbFunc: callback });
                 }
-                console.log("objective: " + prob.mipObjVal());
+                console.log("RANKPATCHES objective: " + prob.mipObjVal());
+                console.log("RANKPATCHES final obj val " +  prob.getObjVal());
                 let patch2buy = [];
                 for (let i = 1; i < variablesNum + 1; i++) {
                     console.log("varibles" + (i-1) + ": " + prob.getColPrim(i));

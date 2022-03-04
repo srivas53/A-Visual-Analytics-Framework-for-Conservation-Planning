@@ -80,25 +80,56 @@ def sum_of_array():
     
     solver = pulp.GUROBI();
     status = optimizationModel.solve()        
-        
+    resultantPatchesDict={}    
     for var in optimizationModel.variables():
         print(f"{var.name}: {var.value()}")
+        resultantPatchesDict[f"{var.name}"] = f"{var.value()}"
         #patchesToBuy[f"{var.name}"]=f"{var.value()}"
         #Extract indexes of the variables that have 1 as a result, and then, send it as a list to NOde
+    print(resultantPatchesDict) 
     
-    
+    resultantPatchesToBuy= []
+    for key, value in resultantPatchesDict.items():
+        if value == '1.0':
+            key2 = int(key.replace("x",""))
+            resultantPatchesToBuy.append(key2)
+    resultantPatchesToBuy.sort()
+    print(resultantPatchesToBuy)
+            
+        
+        
     
     for name, constraint in optimizationModel.constraints.items():
         print(f"{name}: {constraint.value()}")
         
+        
+       
     print(f"objective: {optimizationModel.objective.value()}")
     finalObjectiveValue = optimizationModel.objective.value()
          
 # Return data in json format 
-    return json.dumps({"result":finalObjectiveValue})
+    return json.dumps({"patchIndexesToBuy":resultantPatchesToBuy})
    
 if __name__ == "__main__": 
     app.run(port=5000)
+
+# x0: 1.0
+# x1: 0.0
+# x10: 1.0
+# x11: 0.0
+# x12: 0.0
+# x13: 1.0
+# x2: 0.0
+# x3: 1.0
+# x4: 1.0
+# x5: 0.0
+# x6: 1.0
+# x7: 0.0
+# x8: 1.0
+# x9: 1.0
+
+
+
     
 #9774939.689401    
 

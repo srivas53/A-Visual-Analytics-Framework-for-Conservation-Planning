@@ -193,11 +193,24 @@ module.exports = function (appRoot) {
                     method: 'POST',
                     body: JSON.stringify(optInput),
                     headers: { 'Content-Type': 'application/json' }
-                }).then(res => res.json())
-                  .then(json => console.log(json))
-                  .catch(err => console.log(err));
-
-                
+                }).then(res2 => res2.json())
+                  .then(json => {
+                      //console.log(json["patchIndexesToBuy"]);
+                      let optOutput = json["patchIndexesToBuy"];
+                      console.log(optOutput);
+                      console.log(optOutput.length + " No. of patches to send");
+                      let patch2buy = [];
+                      for (i = 0; i < optOutput.length; i++) {
+                          console.log(optOutput[i], " Index of the patch to send");
+                          patch2buy.push(preprocessedData[optOutput[i]]);
+                      //console.log(patch2buy.length, "Total patches sent");
+                      
+                        }
+                      res.send(patch2buy);
+                    })
+                //console.log(patch2buy.length, "Total patches sent");
+                //console.log(patch2buy);
+                //res.send(patch2buy);
                 writeStream.write(JSON.stringify(optInput));
                 writeStream.on('finish', function () {
                     console.log('optimizationInput file has been written');
@@ -262,7 +275,7 @@ module.exports = function (appRoot) {
                 //     prob.scaleSync(glp.SF_AUTO); //Choose scaling options automatically
                 //     prob.simplexSync({ presolve: glp.ON }); //Using built in presolver for simplex
                 //     let variablesNum = prob.getNumInt(); //returns the number of columns (structural variables), which are marked as integer. Note that this number does include binary columns.
-                //     console.log("variablesNum ", variablesNum);
+                //     //console.log("variablesNum ", variablesNum);
                 //     if (prob.getNumInt() > 0) {
                 //         function callback(tree) {
                 //             if (tree.reason() == glp.IBINGO) { //The callback routine is called with the reason code GLP_IBINGO if LP relaxation of the current subproblem being solved to optimality is integer feasible (i.e. values of all structural variables of integer kind are integral within the working precision) and its objective value is better than the best known integer feasible solution.
@@ -276,7 +289,7 @@ module.exports = function (appRoot) {
                 //     console.log("final obj val " +  prob.getObjVal()); //Just getting an idea about the response structure
                 //     //console.log("variable" + '0' + ": " + prob.getColPrim(1))
                 //     for (let i = 1; i < variablesNum + 1; i++) {
-                //         //console.log("variables" + (i-1) + ": " + prob.getColPrim(i)); //returns primal value of the structural variable associated with j-th column.
+                //         console.log("variables" + (i-1) + ": " + prob.getColPrim(i)); //returns primal value of the structural variable associated with j-th column.
                 //         if (prob.getColPrim(i) == 1) {
                 //             patch2buy.push(preprocessedData[i - 1])
                 //         }
